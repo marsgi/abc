@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>测试</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link rel="stylesheet" href="reset.css">
+<style>
+	#box{width: 600px; height: 300px; border: 1px solid red; margin:20px auto; position: relative;}
+	#con{width: 50px; height: 50px; background: green; position: absolute; left: 100px; top: 50px;}
+</style>
+</head>
+<body>
+	<div id="box">
+		<p id="con"></p>
+	</div>
+</body>
+<script>
+	var box=document.getElementById('box');
+	var con=document.getElementById('con');
+	var l=100,t=50;
+	var movex=0,movey=0;//标记运动方向
+	setInterval(function () {
+		if (movey==0) {
+			t++;
+			if (t>=box.clientHeight-con.clientHeight) {
+				t=box.clientHeight-con.clientHeight;
+				movey=1;
+			};
+			con.style.top=t+'px';
+		} else{
+			t--;
+			if (t<=0) {
+				t=0;
+				movey=0;
+			};
+			con.style.top=t+'px';
+		};
+		
+		if (movex==0) {
+			l++;
+			if (l>=box.clientWidth-con.clientWidth) {
+				l=box.clientWidth-con.clientWidth
+				movex=1;
+			};
+			con.style.left=l+'px';
+		} else{
+			l--;
+			if (l<=0) {
+				l=0;
+				movex=0;
+			};
+			con.style.left=l+'px';
+		};
+	},5);
+</script>
+</html>

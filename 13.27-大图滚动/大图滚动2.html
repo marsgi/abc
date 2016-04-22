@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>大图滚动2</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link rel="stylesheet" href="reset.css">
+<style>
+	#outer{width: 386px; height: 272px; overflow: hidden; position: relative; border: 2px solid red; margin:30px auto;}
+	#inner{width: 386px; height: 272px; overflow: hidden;}
+	#con{overflow: hidden;width: 5000px; height: 272px;}
+	#con img{width: 386px; height: 272px; float: left;}
+	#num{overflow: hidden; position: absolute; left: 124px; bottom: 6px;}
+	#num li{float: left; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 16px; color: green; background: #ccc; margin:0 4px; cursor: pointer;}
+	#left{width: 25px; height: 24px; background: url(images/fx1.png) 0 0 no-repeat; position: absolute; left: 4px; top: 125px; cursor: pointer;}
+	#right{width: 25px; height: 24px; background: url(images/fx2.png) 0 0 no-repeat; position: absolute; right: 4px; top: 125px; cursor: pointer;}
+	/*当前显示的数字样式*/
+	#num .show{background: green; color: red;}
+</style>
+</head>
+<body>
+	<div id="outer">
+		<div id="inner">
+			<div id="con">
+				<img src="images/01.jpg" alt="">
+				<img src="images/02.jpg" alt="">
+				<img src="images/03.jpg" alt="">
+				<img src="images/04.jpg" alt="">
+				<img src="images/05.jpg" alt="">
+			</div>
+			<ul id="num">
+				<li class="show">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+			</ul>
+			<p id="left"></p>
+			<p id="right"></p>
+		</div>
+	</div>
+</body>
+<script>
+	var inner=document.getElementById('inner');
+	var con=document.getElementById('con');
+	var imgs=con.getElementsByTagName('img');
+	var num=document.getElementById('num');
+	var lis=num.getElementsByTagName('li');
+	var left=document.getElementById('left');
+	var right=document.getElementById('right');
+	var a=0,time1=null,time2=null;
+
+	function move(){
+		var start=inner.scrollLeft;//起始位置
+		var end=imgs[0].offsetWidth*a;//结束位置
+		var stepmin=0;//起始步数
+		var stepmax=20;//最大步数
+		var change=end-start;//变化量
+		var everystep=change/stepmax;//每步所走的距离
+		clearInterval(time2);
+		time2=setInterval(function (){//运动过程
+			stepmin++;
+			if (stepmin>=stepmax) {//临界值判断
+				stepmin=stepmax;
+				clearInterval(time2);
+			};
+			start=start+everystep;//起始位置递增
+			inner.scrollLeft=start;//赋值
+		},15);
+		for (var i = 0; i < lis.length; i++) {
+			lis[i].className='';//清除所有数字样式
+		};
+		lis[a].className='show';//当前显示数字
+	}
+
+	// 第一步：自动走
+	function autoMove(){
+		clearInterval(time1);
+		time1=setInterval(function (){//每隔2秒换一张图片
+			a++;
+			if (a>=imgs.length) {
+				a=0;
+			};
+			move();
+		},2000);
+	}
+	autoMove();//进入页面自动执行
+	
+
+	// 第二步：点击左按钮
+	left.onclick=function (){
+		clearInterval(time1);
+		clearInterval(time2);
+		a--;
+		if (a<0) {
+			a=imgs.length-1;
+		};
+		move();
+		autoMove();//控制结束后2秒自动走
+	}
+
+	// 第三步：点击右按钮
+	right.onclick=function (){
+		clearInterval(time1);
+		clearInterval(time2);
+		a++;
+		if (a>=imgs.length) {
+			a=0;
+		};
+		move();
+		autoMove();//控制结束后2秒自动走
+	}
+
+	// 第四步：点击数字
+	for (var i = 0; i < lis.length; i++) {
+		lis[i].onclick=function (){
+			clearInterval(time1);
+			clearInterval(time2);
+			for (var i = 0; i < lis.length; i++) {
+				if (lis[i]==this) {
+					a=i;
+					move();
+					autoMove();//控制结束后2秒自动走
+				};
+			};
+		}
+	};
+
+</script>
+</html>
