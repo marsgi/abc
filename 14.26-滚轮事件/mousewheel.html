@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>测试</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<style>
+	body{height: 800px;}
+	#box{width: 200px; height: 200px; background: green;}
+</style>
+</head>
+<body>
+	<div id="box"></div>
+</body>
+<script>
+	var box=document.getElementById('box');
+	/*box.onmousewheel=function (ev){//非火狐
+		var e=ev||window.event;
+		alert(e.wheelDelta);
+	}*/
+
+	/*box.addEventListener('DOMMouseScroll',function (ev){//火狐 firefox
+		alert(ev.detail);
+	},false);*/
+
+	var str=window.navigator.userAgent.toLowerCase();
+	if (str.indexOf('firefox')!=-1) {
+		box.addEventListener('DOMMouseScroll',function (e){//火狐 firefox
+			// alert(ev.detail);
+			e.preventDefault();//阻止默认事件
+			if (e.detail<0) {
+				var w=box.clientWidth+20;
+				var h=box.clientHeight+20;
+				box.style.width=w+'px';
+				box.style.height=h+'px';
+			} else{
+				var w=box.clientWidth-20;
+				var h=box.clientHeight-20;
+				box.style.width=w+'px';
+				box.style.height=h+'px';
+			};
+		},false);
+	} else{
+		box.onmousewheel=function (ev){//非火狐
+			var e=ev||window.event;
+			// alert(e.wheelDelta);
+			if (e.preventDefault) {
+			     //非ie阻止默认事件
+			     e.preventDefault();
+			} else{
+			     //ie阻止默认事件
+			     e.returnValue=false;
+			};
+			if (e.wheelDelta>0) {
+				var w=box.clientWidth+20;
+				var h=box.clientHeight+20;
+				box.style.width=w+'px';
+				box.style.height=h+'px';
+			} else{
+				var w=box.clientWidth-20;
+				var h=box.clientHeight-20;
+				box.style.width=w+'px';
+				box.style.height=h+'px';
+			};
+		} 
+	};
+</script>
+</html>
